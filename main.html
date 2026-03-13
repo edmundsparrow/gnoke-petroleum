@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <title>Gnoke Petroleum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="global.png">
+<link rel="apple-touch-icon" href="global.png">
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</head>
+<body>
+
+<!-- ── Loading overlay ─────────────────────────────────────────────── -->
+<div id="loading-overlay">
+  <div class="loader-dots">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+  </div>
+  <span class="loader-text">Loading database…</span>
+</div>
+
+<!-- ── Top Bar ─────────────────────────────────────────────────────── -->
+<header class="topbar">
+  <button class="burger" id="burger-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="brand">
+    <span class="brand-gnoke">Gnoke</span>
+    <span class="brand-app">Petroleum</span>
+  </div>
+  <button class="btn-topbar" id="btn-export" title="Export CSV">⬇️</button>
+  <button class="btn-topbar" id="btn-save"   title="Save daily record">💾</button>
+</header>
+
+<!-- ── Nav Overlay (mobile) ────────────────────────────────────────── -->
+<div id="nav-overlay" class="nav-overlay"></div>
+
+<!-- ── Side Drawer (mobile) ────────────────────────────────────────── -->
+<nav id="nav-drawer" class="nav-drawer">
+  <div class="nav-header">
+    <span class="brand-gnoke">Gnoke</span>
+    <span class="brand-app">Petroleum</span>
+  </div>
+  <button class="nav-btn" data-page="entry-page">
+    <span class="nav-icon">⛽</span> Entry
+  </button>
+  <button class="nav-btn" data-page="reports-page">
+    <span class="nav-icon">📊</span> Reports
+  </button>
+  <button class="nav-btn" data-page="settings-page">
+    <span class="nav-icon">⚙️</span> Settings
+  </button>
+  <button class="nav-btn" data-page="about-page">
+    <span class="nav-icon">ℹ️</span> About
+  </button>
+</nav>
+
+<!-- ── Desktop Tab Bar ─────────────────────────────────────────────── -->
+<div class="tab-bar">
+  <button class="tab-btn" data-page="entry-page">⛽ Entry</button>
+  <button class="tab-btn" data-page="reports-page">📊 Reports</button>
+  <button class="tab-btn" data-page="settings-page">⚙️ Settings</button>
+  <button class="tab-btn" data-page="about-page">ℹ️ About</button>
+</div>
+
+<!-- ── Pages ───────────────────────────────────────────────────────── -->
+<main class="pages">
+
+  <!-- ══ ENTRY ══════════════════════════════════════════════════════ -->
+  <section id="entry-page" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Daily Entry</h1>
+        <p class="sub">Record pump sales for a selected date</p>
+      </div>
+    </div>
+
+    <div id="entry-product-tabs" class="product-tabs" role="tablist"></div>
+
+    <div class="control-row">
+      <div class="control-date">
+        <label for="entry-date">Date</label>
+        <input type="date" id="entry-date">
+      </div>
+    </div>
+
+    <div class="data-card">
+      <div class="data-card-header">
+        <h2 id="entry-header" class="card-title-inline">Daily Entry</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="entry-thead"></thead>
+          <tbody id="entry-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ REPORTS ════════════════════════════════════════════════════ -->
+  <section id="reports-page" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Reports</h1>
+        <p class="sub">Weekly, monthly &amp; all-time summaries</p>
+      </div>
+    </div>
+
+    <div id="reports-product-tabs" class="product-tabs" role="tablist"></div>
+
+    <div class="control-row">
+      <div class="control-date" id="reports-date-wrap">
+        <label for="reports-date">Date</label>
+        <input type="date" id="reports-date">
+      </div>
+      <div class="view-chips" id="view-chips" role="group">
+        <button class="chip-btn" data-view="day">Day</button>
+        <button class="chip-btn" data-view="week">Week</button>
+        <button class="chip-btn" data-view="month">Month</button>
+        <button class="chip-btn active" data-view="summary">All Time</button>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <div class="data-card-header">
+        <h2 id="reports-header" class="card-title-inline">All-Time Summary</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="reports-thead"></thead>
+          <tbody id="reports-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SETTINGS ═══════════════════════════════════════════════════ -->
+  <section id="settings-page" class="page">
+    <div class="page-header">
+      <div>
+        <h1>Settings</h1>
+        <p class="sub">Configure pumps &amp; attendant names</p>
+      </div>
+      <button class="btn-primary" id="btn-settings-save">Save Settings</button>
+    </div>
+    <!-- Product config cards injected by ui.js -->
+    <div id="settings-products" class="config-grid"></div>
+  </section>
+
+  <!-- ══ ABOUT ══════════════════════════════════════════════════════ -->
+  <section id="about-page" class="page">
+    <div class="page-header">
+      <div>
+        <h1>About</h1>
+        <p class="sub">Gnoke Petroleum · v1.0</p>
+      </div>
+    </div>
+
+    <div class="config-grid">
+
+      <div class="form-card">
+        <h2 class="card-title">⛽ Gnoke Petroleum</h2>
+        <p class="hint" style="line-height:1.8">
+          Offline-first daily sales tracker for fuel stations.<br><br>
+          Track PMS, AGO, Kerosene and LPG across multiple pumps.
+          View weekly and monthly breakdowns, name attendants per pump,
+          and export to CSV — all without internet or an account.<br><br>
+          Your data never leaves the device.
+        </p>
+      </div>
+
+      <div class="form-card">
+        <h2 class="card-title">⚙️ Under The Hood</h2>
+        <table style="width:100%;border-collapse:collapse">
+          <tbody>
+            <tr><td class="about-key">Database</td><td>SQLite (sql.js / WASM)</td></tr>
+            <tr><td class="about-key">Persistence</td><td>IndexedDB</td></tr>
+            <tr><td class="about-key">Network</td><td>None required</td></tr>
+            <tr><td class="about-key">Stack</td><td>HTML · CSS · Vanilla JS</td></tr>
+            <tr><td class="about-key">Version</td><td>v1.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="form-card">
+        <h2 class="card-title">👤 Author</h2>
+        <p class="hint">
+          <strong>Edmund Sparrow</strong><br>
+          Part of the Gnoke Suite of offline-first tools built for communities that need them most.
+        </p>
+        <div class="data-btns" style="margin-top:14px">
+          <a class="btn-outline" href="/cdn-cgi/l/email-protection#b2d7d6dfc7dcd6c1c2d3c0c0ddc5f2d5dfd3dbde9cd1dddf" style="text-decoration:none">✉ Email</a>
+          <a class="btn-outline" href="https://github.com/edmundsparrow" target="_blank" rel="noopener" style="text-decoration:none">⌥ GitHub</a>
+         <a class="btn-outline" href="https://selar.com/showlove/edmundsparrow" target="_blank" rel="noopener" style="text-decoration:none">❤️ Support</a>
+      </div>
+      </div>
+
+      <div class="form-card">
+        <h2 class="card-title">📜 License</h2>
+        <p class="hint">
+          Free and open source under the
+          <strong>GNU General Public License v3.0</strong>.<br><br>
+          Use, modify and distribute freely — any distributed version
+          must remain open source under GPL v3.
+        </p>
+        <p class="hint" style="margin-top:10px;font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted)">
+          © 2025 – <span class="copy-year"></span> Edmund Sparrow — Gnoke Suite
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Toast ───────────────────────────────────────────────────────── -->
+<div id="toast" class="toast"></div>
+
+<!-- ── Scripts ─────────────────────────────────────────────────────── -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script src="js/summary.js"></script>
+<script>
+  document.querySelectorAll('.copy-year').forEach(el => el.textContent = new Date().getFullYear());
+</script>
+
+</body>
+</html>
